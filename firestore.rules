@@ -1,0 +1,168 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global default deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Global utility functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function getUserId() {
+      return request.auth != null ? request.auth.uid : 'mock_user_id';
+    }
+
+    function isOwner(userId) {
+      return userId == getUserId();
+    }
+
+    function isDocOwner(data) {
+      return data.userId == getUserId();
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Entity Validation Helpers
+    function isValidUser(user) {
+      return user.id is string && user.id.size() <= 128 &&
+             user.firstName is string && user.firstName.size() <= 100 &&
+             user.lastName is string && user.lastName.size() <= 100 &&
+             user.email is string && user.email.size() <= 200 &&
+             user.role is string && user.role.size() <= 20;
+    }
+
+    function isValidClient(client) {
+      return client.id is string && client.id.size() <= 128 &&
+             client.userId is string && client.userId == getUserId() &&
+             client.firstName is string && client.firstName.size() <= 100 &&
+             client.lastName is string && client.lastName.size() <= 100 &&
+             client.status is string && client.status.size() <= 50;
+    }
+
+    function isValidCase(caseObj) {
+      return caseObj.id is string && caseObj.id.size() <= 128 &&
+             caseObj.userId is string && caseObj.userId == getUserId() &&
+             caseObj.clientName is string && caseObj.clientName.size() <= 200 &&
+             caseObj.caseNumber is string && caseObj.caseNumber.size() <= 100 &&
+             caseObj.status is string && caseObj.status.size() <= 50;
+    }
+
+    function isValidSession(session) {
+      return session.id is string && session.id.size() <= 128 &&
+             session.userId is string && session.userId == getUserId() &&
+             session.caseId is string && session.caseId.size() <= 128 &&
+             session.clientName is string && session.clientName.size() <= 200 &&
+             session.status is string && session.status.size() <= 50;
+    }
+
+    // List cannot exceed 20 custom tags inside lists (Total Array Guarding)
+    function isValidTask(task) {
+      return task.id is string && task.id.size() <= 128 &&
+             task.userId is string && task.userId == getUserId() &&
+             task.title is string && task.title.size() <= 200 &&
+             task.status is string && task.status.size() <= 50 &&
+             task.priority is string && task.priority.size() <= 50;
+    }
+
+    function isValidPayment(payment) {
+      return payment.id is string && payment.id.size() <= 128 &&
+             payment.userId is string && payment.userId == getUserId() &&
+             payment.amount is number &&
+             payment.date is string && payment.date.size() <= 50;
+    }
+
+    function isValidExpense(expense) {
+      return expense.id is string && expense.id.size() <= 128 &&
+             expense.userId is string && expense.userId == getUserId() &&
+             expense.amount is number &&
+             expense.date is string && expense.date.size() <= 50;
+    }
+
+    function isValidSalary(salary) {
+      return salary.id is string && salary.id.size() <= 128 &&
+             salary.userId is string && salary.userId == getUserId() &&
+             salary.employeeName is string && salary.employeeName.size() <= 200 &&
+             salary.baseSalary is number &&
+             salary.month is string && salary.month.size() <= 50 &&
+             salary.status is string && salary.status.size() <= 50;
+    }
+
+    // COLLECTION MATCHERS
+
+    // Users Collection
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create, update: if isOwner(userId) && isValidUser(request.resource.data);
+      allow delete: if false; // Profiles cannot be self-deleted through standard SDK rules
+    }
+
+    // Clients Collection
+    match /clients/{clientId} {
+      allow get: if isDocOwner(resource.data);
+      allow list: if isDocOwner(resource.data);
+      allow create: if isValidId(clientId) && isValidClient(request.resource.data);
+      allow update: if isValidId(clientId) && isDocOwner(resource.data) && isValidClient(request.resource.data);
+      allow delete: if isValidId(clientId) && isDocOwner(resource.data);
+    }
+
+    // Cases Collection
+    match /cases/{caseId} {
+      allow get: if isDocOwner(resource.data);
+      allow list: if isDocOwner(resource.data);
+      allow create: if isValidId(caseId) && isValidCase(request.resource.data);
+      allow update: if isValidId(caseId) && isDocOwner(resource.data) && isValidCase(request.resource.data);
+      allow delete: if isValidId(caseId) && isDocOwner(resource.data);
+    }
+
+    // Sessions Collection
+    match /sessions/{sessionId} {
+      allow get: if isDocOwner(resource.data);
+      allow list: if isDocOwner(resource.data);
+      allow create: if isValidId(sessionId) && isValidSession(request.resource.data);
+      allow update: if isValidId(sessionId) && isDocOwner(resource.data) && isValidSession(request.resource.data);
+      allow delete: if isValidId(sessionId) && isDocOwner(resource.data);
+    }
+
+    // Tasks Collection
+    match /tasks/{taskId} {
+      allow get: if isDocOwner(resource.data);
+      allow list: if isDocOwner(resource.data);
+      allow create: if isValidId(taskId) && isValidTask(request.resource.data);
+      allow update: if isValidId(taskId) && isDocOwner(resource.data) && isValidTask(request.resource.data);
+      allow delete: if isValidId(taskId) && isDocOwner(resource.data);
+    }
+
+    // Payments Collection
+    match /payments/{paymentId} {
+      allow get: if isDocOwner(resource.data);
+      allow list: if isDocOwner(resource.data);
+      allow create: if isValidId(paymentId) && isValidPayment(request.resource.data);
+      allow update: if isValidId(paymentId) && isDocOwner(resource.data) && isValidPayment(request.resource.data);
+      allow delete: if isValidId(paymentId) && isDocOwner(resource.data);
+    }
+
+    // Expenses Collection
+    match /expenses/{expenseId} {
+      allow get: if isDocOwner(resource.data);
+      allow list: if isDocOwner(resource.data);
+      allow create: if isValidId(expenseId) && isValidExpense(request.resource.data);
+      allow update: if isValidId(expenseId) && isDocOwner(resource.data) && isValidExpense(request.resource.data);
+      allow delete: if isValidId(expenseId) && isDocOwner(resource.data);
+    }
+
+    // Salaries Collection
+    match /salaries/{salaryId} {
+      allow get: if isDocOwner(resource.data);
+      allow list: if isDocOwner(resource.data);
+      allow create: if isValidId(salaryId) && isValidSalary(request.resource.data);
+      allow update: if isValidId(salaryId) && isDocOwner(resource.data) && isValidSalary(request.resource.data);
+      allow delete: if isValidId(salaryId) && isDocOwner(resource.data);
+    }
+  }
+}

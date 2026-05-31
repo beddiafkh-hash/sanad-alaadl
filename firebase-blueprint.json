@@ -1,0 +1,157 @@
+{
+  "entities": {
+    "user": {
+      "title": "User Profile",
+      "description": "Information stored on first user registration",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "The user UID" },
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "email": { "type": "string" },
+        "photoUrl": { "type": "string" },
+        "role": { "type": "string" },
+        "welcomeName": { "type": "string" },
+        "officeName": { "type": "string" }
+      },
+      "required": ["id", "firstName", "lastName", "email", "role"]
+    },
+    "client": {
+      "title": "Client",
+      "description": "Client profile details",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "identityNumber": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "address": { "type": "string" },
+        "city": { "type": "string" },
+        "wilaya": { "type": "string" },
+        "casesCount": { "type": "integer" },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "userId", "firstName", "lastName", "status"]
+    },
+    "case": {
+      "title": "Legal Case",
+      "description": "Details about a lawsuit or case",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "clientName": { "type": "string" },
+        "caseNumber": { "type": "string" },
+        "type": { "type": "string" },
+        "status": { "type": "string" },
+        "description": { "type": "string" },
+        "court": { "type": "string" }
+      },
+      "required": ["id", "userId", "clientName", "caseNumber", "status"]
+    },
+    "session": {
+      "title": "Session",
+      "description": "A court session or scheduled trial hearing",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "caseId": { "type": "string" },
+        "clientName": { "type": "string" },
+        "caseNumber": { "type": "string" },
+        "type": { "type": "string" },
+        "time": { "type": "string" },
+        "court": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "userId", "caseId", "clientName", "status"]
+    },
+    "task": {
+      "title": "Task",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "dueDate": { "type": "string" },
+        "status": { "type": "string" },
+        "priority": { "type": "string" }
+      },
+      "required": ["id", "userId", "title", "status", "priority"]
+    },
+    "payment": {
+      "title": "Payment",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "amount": { "type": "number" },
+        "date": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "required": ["id", "userId", "amount", "date"]
+    },
+    "expense": {
+      "title": "Expense",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "amount": { "type": "number" },
+        "date": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "required": ["id", "userId", "amount", "date"]
+    },
+    "salary": {
+      "title": "Salary",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "employeeName": { "type": "string" },
+        "baseSalary": { "type": "number" },
+        "month": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "userId", "employeeName", "baseSalary", "month", "status"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": { "$ref": "user" },
+      "description": "User profiles"
+    },
+    "clients/{clientId}": {
+      "schema": { "$ref": "client" },
+      "description": "Clients of the lawyer"
+    },
+    "cases/{caseId}": {
+      "schema": { "$ref": "case" },
+      "description": "Lawsuits belonging to the lawyer"
+    },
+    "sessions/{sessionId}": {
+      "schema": { "$ref": "session" },
+      "description": "Hearing sessions of the cases"
+    },
+    "tasks/{taskId}": {
+      "schema": { "$ref": "task" },
+      "description": "Tasks for the office"
+    },
+    "payments/{paymentId}": {
+      "schema": { "$ref": "payment" },
+      "description": "Fee earnings records"
+    },
+    "expenses/{expenseId}": {
+      "schema": { "$ref": "expense" },
+      "description": "Expense records"
+    },
+    "salaries/{salaryId}": {
+      "schema": { "$ref": "salary" },
+      "description": "Employee or clerk salaries"
+    }
+  }
+}

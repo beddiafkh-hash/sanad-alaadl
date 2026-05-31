@@ -1,0 +1,496 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Cairo", ui-sans-serif, system-ui, sans-serif;
+  --color-gold: #D4AF37;
+  --color-gold-dark: #B8860B;
+  --color-navy: #071B3A;
+  --color-navy-light: #0B2A5A;
+  --color-navy-accent: #1A3A6B;
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @keyframes pulse-soft {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  @keyframes pulse-gold {
+    0%, 100% { opacity: 1; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
+    50% { opacity: 0.8; text-shadow: 0 0 20px rgba(212, 175, 55, 0.8); }
+  }
+
+  @keyframes marquee-rtl {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+}
+
+:root {
+  font-family: "Cairo", sans-serif;
+  --background-base: #f4f6f9;
+  --text-base: #071b3a;
+  --navy: #ffffff;
+  --navy-light: #f8fafc;
+  --navy-accent: #e2e8f0;
+  --gold-alpha: rgba(212, 175, 55, 0.2);
+  --glass-bg: rgba(255, 255, 255, 0.9);
+  --border-light: rgba(212, 175, 55, 0.25);
+  --text-muted: #475569;
+}
+
+:root.dark {
+  --background-base: #030b1a;
+  --text-base: #ffffff;
+  --navy: #071B3A;
+  --navy-light: #0B2A5A;
+  --navy-accent: #1A3A6B;
+  --gold-alpha: rgba(212, 175, 55, 0.1);
+  --glass-bg: rgba(3, 11, 26, 0.65);
+  --border-light: rgba(212, 175, 55, 0.15);
+  --text-muted: rgba(255, 255, 255, 0.6);
+}
+
+body {
+  direction: rtl;
+  background-color: var(--background-base);
+  color: var(--text-base);
+  @apply overflow-x-hidden transition-colors duration-500;
+}
+
+.header-container {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1.5px solid rgba(212, 175, 55, 0.45);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s ease-in-out;
+}
+
+:root.dark .header-container {
+  background: linear-gradient(180deg, rgba(7, 27, 58, 0.85) 0%, rgba(3, 11, 26, 0.95) 100%);
+  box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.1), 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.header-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l15 30-15 30-15-30z' fill-opacity='0.03' fill='%23D4AF37'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.luxury-glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(30px) saturate(160%);
+  border: 1px solid var(--border-light);
+  box-shadow: 0 15px 35px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.5s ease-in-out;
+}
+
+:root.dark .luxury-glass {
+  box-shadow: 0 15px 45px 0 rgba(0, 0, 0, 0.7);
+}
+
+.luxury-card {
+  background: var(--navy);
+  border: 1px solid var(--border-light);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:root.dark .luxury-card {
+  background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+  box-shadow: none;
+}
+
+.luxury-card:hover {
+  border-color: rgba(212, 175, 55, 0.45);
+  background: rgba(212, 175, 55, 0.06);
+  transform: translateY(-2px);
+}
+
+.gold-edge {
+  position: relative;
+}
+
+.gold-edge::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+  opacity: 0.3;
+}
+
+.crystal-clock {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(
+    to bottom,
+    #ffffff 0%,
+    #fef9c3 20%,
+    #ca8a04 40%,
+    #451a03 60%,
+    #ca8a04 80%,
+    #ffffff 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.5));
+  position: relative;
+}
+
+/* Diamond/Crystal Texture for numbers */
+.crystal-texture {
+  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0l20 20-20 20L0 20z' fill='%23ffffff' fill-opacity='0.05'/%3E%3C/svg%3E");
+  background-size: 15px 15px;
+  -webkit-background-clip: text;
+}
+
+.glow-gold-refined {
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.6), 0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+.emblem-gold {
+  background: radial-gradient(circle at 30% 30%, #fef9c3, #ca8a04, #451a03);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.4), inset 0 0 10px rgba(255,255,255,0.5);
+  border: 2px solid #030b1a;
+}
+
+.animate-glow {
+  animation: soft-glow 3s ease-in-out infinite;
+}
+
+@keyframes soft-glow {
+  0%, 100% { opacity: 1; filter: brightness(1); }
+  50% { opacity: 0.8; filter: brightness(1.2) drop-shadow(0 0 15px rgba(212, 175, 55, 0.4)); }
+}
+
+@keyframes marquee-ltr {
+  0% { transform: translate3d(-50%, 0, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes custom-infinite-marquee {
+  0% { transform: translate3d(-50%, 0, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+.luxury-marquee {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  width: max-content !important;
+  white-space: nowrap !important;
+  animation: custom-infinite-marquee 15s linear infinite !important;
+  will-change: transform;
+}
+
+.mobile-visible-marquee-container {
+  overflow: visible !important;
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+}
+
+/* Custom Slim Gold Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(212, 175, 55, 0.35) !important;
+  border-radius: 999px !important;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 175, 55, 0.65) !important;
+}
+.custom-scrollbar {
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(212, 175, 55, 0.35) transparent !important;
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+
+.legal-branding {
+  background: linear-gradient(135deg, #ca8a04 0%, #fef9c3 50%, #ca8a04 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 900;
+}
+
+.metallic-3d-text {
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #fef9c3 15%,
+    #facc15 35%,
+    #eab308 50%,
+    #a16207 65%,
+    #facc15 85%,
+    #ffffff 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: 'JetBrains Mono', monospace;
+  text-shadow: 
+    0 1px 0 #854d0e,
+    0 2px 0 #713f12,
+    0 3px 0 #451a03,
+    0 4px 6px rgba(0,0,0,0.8),
+    0 10px 30px rgba(212, 175, 55, 0.6);
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
+}
+
+.animate-marquee {
+  animation: marquee-rtl 25s linear infinite;
+}
+
+.scroll-hide::-webkit-scrollbar {
+  display: none;
+}
+.scroll-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.main-content-padding {
+  @apply pt-0 px-4 sm:px-6;
+}
+
+/* Premium Metallic Gold Coin styled like a dimensional stamped medal */
+.metallic-gold-coin {
+  background: radial-gradient(circle at 35% 35%, #fffdf4 0%, #ffd700 25%, #d4af37 45%, #b8860b 70%, #684a00 90%, #302200 100%);
+  border: 1px solid rgba(255, 230, 100, 0.6);
+  box-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.4) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.6) inset,
+    0 4px 10px rgba(0, 0, 0, 0.5),
+    0 2px 4px rgba(212, 175, 55, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.metallic-gold-coin::before {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  border-radius: 50%;
+  border: 2px dashed rgba(212, 175, 55, 0.4);
+  pointer-events: none;
+}
+
+.metallic-gold-coin-text {
+  font-family: "Cairo", sans-serif;
+  color: #1a1200;
+  text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.5), -1px -1px 0px rgba(0, 0, 0, 0.4);
+  font-weight: 900;
+}
+
+/* Mosque Glowing Outer Ring (silver/gold mix) */
+.mosque-glowing-ring {
+  background: radial-gradient(circle at 50% 10%, #ffffff 0%, #cfb53b 20%, #8a6421 50%, #ae8e34 75%, #ffffff 90%, #3a2a07 100%);
+  box-shadow: 
+    0 0 25px rgba(212, 175, 55, 0.4),
+    0 0 50px rgba(212, 175, 55, 0.15),
+    inset 0 0 16px rgba(255, 255, 255, 0.8),
+    inset 0 0 4px rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Crystal digital countdown text */
+.digit-crystallized {
+  font-family: 'Cairo', 'Inter', sans-serif;
+  font-variant-numeric: tabular-nums;
+  color: #ffda44;
+  text-shadow: 
+    0 0 8px rgba(255, 218, 68, 0.6),
+    0 0 15px rgba(255, 218, 68, 0.2);
+  letter-spacing: -0.02em;
+}
+
+/* ==========================================
+   ALABASTER SILK & ROYAL GOLD LIGHT MODE STYLES
+   ========================================== */
+html:not(.dark) {
+  --background-base: #f4f6f9;
+  --text-base: #071b3a;
+  --navy: #ffffff;
+  --navy-light: #f8fafc;
+  --navy-accent: #e2e8f0;
+  --gold-alpha: rgba(212, 175, 55, 0.18);
+  --glass-bg: rgba(255, 255, 255, 0.9);
+  --border-light: rgba(212, 175, 55, 0.22);
+}
+
+html:not(.dark) body {
+  background-color: #f4f6f9 !important;
+  color: #0d1e3a !important;
+}
+
+/* Map hardcoded background classes to light mode colors */
+html:not(.dark) [class*="bg-[#030b1a]"],
+html:not(.dark) [class*="bg-[#020813]"],
+html:not(.dark) [class*="bg-[#061229]"],
+html:not(.dark) .bg-\[\#030b1a\],
+html:not(.dark) .bg-\[\#020813\] {
+  background-color: #f4f6f9 !important;
+}
+
+html:not(.dark) [class*="bg-[#071B3A]"],
+html:not(.dark) [class*="bg-[#0b244d]"],
+html:not(.dark) [class*="bg-[#0a254d]"],
+html:not(.dark) .bg-\[\#071B3A\],
+html:not(.dark) .bg-\[\#0b244d\] {
+  background-color: #ffffff !important;
+  border-color: rgba(212, 175, 55, 0.2) !important;
+  color: #0d1e3a !important;
+}
+
+html:not(.dark) .text-white,
+html:not(.dark) .text-white\/90,
+html:not(.dark) .text-white\/80 {
+  color: #030712 !important;
+}
+
+html:not(.dark) .text-white\/70,
+html:not(.dark) .text-white\/60,
+html:not(.dark) .text-white\/50 {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .text-white\/40,
+html:not(.dark) .text-white\/30,
+html:not(.dark) .text-white\/20,
+html:not(.dark) .text-white\/10 {
+  color: #334155 !important;
+}
+
+/* Maintain gold and active state colors (Darkened for maximum contrast in light mode) */
+html:not(.dark) .text-gold,
+html:not(.dark) [class*="text-gold/"],
+html:not(.dark) [class*="text-gold-dark"],
+html:not(.dark) [class*="text-amber-"],
+html:not(.dark) [class*="text-yellow-"],
+html:not(.dark) [class*="text-orange-"] {
+  color: #854d0e !important; /* Rich deep bronze-gold with high legibility on light backgrounds */
+}
+
+html:not(.dark) .hover\:text-gold:hover,
+html:not(.dark) [class*="hover:text-gold"]:hover,
+html:not(.dark) [class*="hover:text-amber-"]:hover,
+html:not(.dark) [class*="hover:text-yellow-"]:hover,
+html:not(.dark) [class*="hover:text-orange-"]:hover {
+  color: #78350f !important; /* Even deeper bronze brown on hover */
+}
+
+html:not(.dark) .digit-crystallized {
+  color: #854d0e !important;
+  text-shadow: none !important;
+}
+
+html:not(.dark) .border-white\/5,
+html:not(.dark) .border-white\/10,
+html:not(.dark) .border-gold\/10,
+html:not(.dark) .border-gold\/20 {
+  border-color: rgba(212, 175, 55, 0.15) !important;
+}
+
+html:not(.dark) input,
+html:not(.dark) textarea {
+  background-color: #ffffff !important;
+  color: #071b3a !important;
+  border: 1px solid rgba(212, 175, 55, 0.25) !important;
+}
+
+html:not(.dark) input:focus,
+html:not(.dark) textarea:focus {
+  border-color: #D4AF37 !important;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.15) !important;
+}
+
+html:not(.dark) select {
+  background-color: #ffffff !important;
+  color: #071b3a !important;
+  border: 1px solid rgba(212, 175, 55, 0.25) !important;
+}
+
+/* Sidebars and global containers */
+html:not(.dark) aside,
+html:not(.dark) .sidebar-container {
+  background-color: #ffffff !important;
+  border-left: 1px solid rgba(212, 175, 55, 0.2) !important;
+}
+
+html:not(.dark) .bg-navy,
+html:not(.dark) .bg-navy-light {
+  background-color: #ffffff !important;
+}
+
+html:not(.dark) .backdrop-blur-md,
+html:not(.dark) .backdrop-blur-xl,
+html:not(.dark) .backdrop-blur-2xl,
+html:not(.dark) .backdrop-blur-3xl {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(20px) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Modals & Drawers centering and background fix */
+html:not(.dark) .modal-content, 
+html:not(.dark) [class*="max-w-4xl"],
+html:not(.dark) [class*="max-w-2xl"],
+html:not(.dark) [class*="max-w-3xl"],
+html:not(.dark) [class*="max-w-5xl"],
+html:not(.dark) [class*="max-w-md"],
+html:not(.dark) [class*="max-w-lg"] {
+  background-color: #ffffff !important;
+  border: 1px solid rgba(212, 175, 55, 0.3) !important;
+}
+
+html:not(.dark) .selection\:bg-gold\/30::selection {
+  background-color: rgba(212, 175, 55, 0.2) !important;
+  color: #ca8a04 !important;
+}
+
+/* Shadow enhancements for light mode definitions */
+html:not(.dark) .shadow-2xl,
+html:not(.dark) .shadow-[-10px_0_30px_rgba(0,0,0,0.5)],
+html:not(.dark) .shadow-[-20px_0_50px_rgba(0,0,0,0.5)] {
+  box-shadow: 0 10px 30px rgba(7, 27, 58, 0.05) !important;
+}
+
+

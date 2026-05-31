@@ -1,0 +1,17 @@
+{
+  "name": "Sanad Al-Adl (سند العدل)",
+  "description": "Smart legal office management system for Algerian lawyers, featuring AI analysis, real-time tracking, and spiritual workspace integration.",
+  "requestFramePermissions": [
+    "geolocation",
+    "microphone",
+    "camera"
+  ],
+  "majorCapabilities": [
+    "AI Case Analysis",
+    "Smart Calendar",
+    "Financial Management",
+    "Secure Vault",
+    "Prayer Times Integration",
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
